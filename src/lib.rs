@@ -1,3 +1,2 @@
-pub fn run() {
-    println!("This is running!")
-}
+// Declare Modules
+pub mod application;
