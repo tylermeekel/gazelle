@@ -1,10 +1,8 @@
 // The main.rs file exists as a Sandboxing environment for the Gazelle application.
-use gazelle::application;
+use gazelle;
 
 fn main() {
-    let mut sandbox = application::Application {
-
-    };
+    let mut sandbox = gazelle::Application::build().unwrap();
 
     sandbox.run();
 }
