@@ -1,3 +1,6 @@
+// Modules
+pub mod event;
+
 // Application is the entry point for a Gazelle application
 pub struct Application {
 
