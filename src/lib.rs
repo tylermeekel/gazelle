@@ -1,9 +1,10 @@
-use std::{collections::HashMap, error::Error, f32::consts::E};
+use std::{collections::HashMap, error::Error};
 
-use winit::{event_loop::EventLoop, window::{WindowBuilder, WindowId}};
+use winit::{event_loop::EventLoop, window::WindowId};
 
 // Modules
 pub mod event;
+pub mod logging;
 
 struct WindowState;
 
