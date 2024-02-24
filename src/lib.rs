@@ -1,4 +1,4 @@
-use std::{collections::HashMap, error::Error};
+use std::{collections::HashMap, error::Error, f32::consts::E};
 
 use winit::{event_loop::EventLoop, window::WindowId};
 
@@ -28,28 +28,37 @@ impl Application {
     }
 
     // Take events from the event loop and handle them
-    // TODO: Implement an event dispatcher
     fn handle_event(&self, e: winit::event::WindowEvent) {
         use winit::event::WindowEvent::*;
 
-        match e {
+        let gz_event: Option<Box<dyn Event>> = match e {
             CursorMoved { position, .. } => {
-                let cme = event::mouse::MouseMoved::create(position.x as u32, position.y as u32);
-                logging::log_core(cme.description())
+                Some(Box::new(event::mouse::MouseMoved::create(position.x as u32, position.y as u32)))
             },
             KeyboardInput { event, .. } => {
                 match event.state {
                     winit::event::ElementState::Pressed => {
-                        let kpe = crate::event::keyboard::KeyPressed::create(event.logical_key, 1);
-                        logging::log_core(kpe.description());
+                        Some(Box::new(crate::event::keyboard::KeyPressed::create(event.logical_key, event.repeat)))
                     },
                     winit::event::ElementState::Released => {
-                        let kre = crate::event::keyboard::KeyPressed::create(event.logical_key, 1);
-                        logging::log_core(kre.description());
+                        Some(Box::new(crate::event::keyboard::KeyReleased::create(event.logical_key)))
                     },
                 }
-            }
-            _ => (),
+            },
+            MouseInput { state, button, .. } => {
+                match state {
+                    winit::event::ElementState::Pressed => Some(Box::new(event::mouse::MouseButtonPressed::create(button))),
+                    winit::event::ElementState::Released => Some(Box::new(event::mouse::MouseButtonReleased::create(button))),
+                }
+            },
+            MouseWheel { .. } => Some(Box::new(event::mouse::MouseScrolled::create())),
+            _ => None,
+        };
+
+        // TODO: Implement an event dispatcher
+        match gz_event {
+            Some(event) => logging::log_core(event.description()),
+            None => (),
         }
     }
 
@@ -69,7 +78,10 @@ impl Application {
         event_loop.run(move |event, event_loop| match event {
             // Window Events
             winit::event::Event::WindowEvent { window_id, event } => {
-                self.handle_event(event);
+                match event {
+                    winit::event::WindowEvent::CloseRequested => event_loop.exit(), // exit the event loop when window close is requested
+                    event => self.handle_event(event), // handle the event otherwise
+                }
             },
             _ => (),
         })?;

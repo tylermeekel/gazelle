@@ -49,11 +49,11 @@ impl super::Event for MouseScrolled {
 }
 
 pub struct MouseButtonPressed {
-    button: i32,
+    button: winit::event::MouseButton,
 }
 
 impl MouseButtonPressed {
-    pub fn create(button: i32) -> Self {
+    pub fn create(button: winit::event::MouseButton) -> Self {
         Self {
             button
         }
@@ -70,16 +70,16 @@ impl super::Event for MouseButtonPressed {
     }
 
     fn description(&self) -> String {
-        format!("Mouse Button Pressed Event: button={}", self.button)
+        format!("Mouse Button Pressed Event: button={:?}", self.button)
     }
 }
 
 pub struct MouseButtonReleased {
-    button: i32,
+    button: winit::event::MouseButton,
 }
 
 impl MouseButtonReleased {
-    pub fn create(button: i32) -> Self {
+    pub fn create(button: winit::event::MouseButton) -> Self {
         Self {
             button,
         }
@@ -96,6 +96,6 @@ impl super::Event for MouseButtonReleased {
     }
 
     fn description(&self) -> String {
-        format!("Mouse Button Released Event: button={}", self.button)
+        format!("Mouse Button Released Event: button={:?}", self.button)
     }
 }

@@ -2,14 +2,14 @@ use winit::keyboard::SmolStr;
 
 pub struct KeyPressed {
     keycode: winit::keyboard::Key<SmolStr>,
-    repeat_count: i32,
+    repeat: bool,
 }
 
 impl KeyPressed {
-    pub fn create(keycode: winit::keyboard::Key<SmolStr>, repeat_count: i32) -> Self {
+    pub fn create(keycode: winit::keyboard::Key<SmolStr>, repeat: bool) -> Self {
         Self {
             keycode,
-            repeat_count,
+            repeat,
         }
     }
 }
@@ -24,16 +24,16 @@ impl super::Event for KeyPressed {
     }
 
     fn description(&self) -> String {
-        format!("Key Pressed Event: key={:?} repeat_count={}", self.keycode, self.repeat_count)
+        format!("Key Pressed Event: key={:?} repeat={}", self.keycode, self.repeat)
     }
 }
 
 pub struct KeyReleased {
-    keycode: i32,
+    keycode: winit::keyboard::Key<SmolStr>,
 }
 
 impl KeyReleased {
-    pub fn create(keycode: i32) -> Self {
+    pub fn create(keycode: winit::keyboard::Key<SmolStr>) -> Self {
         Self {
             keycode
         }
@@ -50,6 +50,6 @@ impl super::Event for KeyReleased {
     }
 
     fn description(&self) -> String {
-        format!("Key Released Event: keycode={}", self.keycode)
+        format!("Key Released Event: keycode={:?}", self.keycode)
     }
 }
