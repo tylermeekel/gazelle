@@ -32,12 +32,12 @@ pub enum EventType {
 
 bitflags! {
     pub struct EventCategoryFlag: u32 {
-        const Application = 0b00000001;
-        const Keyboard = 0b00000010;
-        const MouseMoved = 0b00000100;
-        const MouseButton = 0b00001000;
-        const Input = 0b00010000;
-        const Window = 0b00100000;
+        const Application = 0b0000_0001;
+        const Keyboard = 0b0000_0010;
+        const MouseMoved = 0b0000_0100;
+        const MouseButton = 0b0000_1000;
+        const Input = 0b0001_0000;
+        const Window = 0b0010_0000;
     } 
 }
 
@@ -45,5 +45,7 @@ pub trait Event {
     fn event_type(&self) -> EventType;
     fn category_flags(&self) -> EventCategoryFlag;
     fn description(&self) -> String;
-    fn is_in_category(&self, ecf: EventCategoryFlag) -> bool;
+    fn is_in_category(&self, category: EventCategoryFlag) -> bool {
+        self.category_flags().contains(category)
+    }
 }
