@@ -1,10 +1,12 @@
+use winit::keyboard::SmolStr;
+
 pub struct KeyPressed {
-    keycode: i32,
+    keycode: winit::keyboard::Key<SmolStr>,
     repeat_count: i32,
 }
 
 impl KeyPressed {
-    pub fn create(keycode: i32, repeat_count: i32) -> Self {
+    pub fn create(keycode: winit::keyboard::Key<SmolStr>, repeat_count: i32) -> Self {
         Self {
             keycode,
             repeat_count,
@@ -22,7 +24,7 @@ impl super::Event for KeyPressed {
     }
 
     fn description(&self) -> String {
-        format!("Key Pressed Event: keycode={} repeat_count={}", self.keycode, self.repeat_count)
+        format!("Key Pressed Event: key={:?} repeat_count={}", self.keycode, self.repeat_count)
     }
 }
 

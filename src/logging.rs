@@ -8,7 +8,7 @@ fn log(message: String) {
     println!("({}) {}", formatted_time, message)
 }
 
-pub fn log_core(message: &str) {
+pub fn log_core(message: String) {
     log(format!("[{}]: {}", "CORE".red(), message));
 }
 
