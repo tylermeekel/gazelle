@@ -1,13 +1,10 @@
-// Submodules
-mod application;
-mod window;
-mod mouse;
-mod keyboard;
+use bitflags::bitflags;
 
-// Helper function for creating bit flags
-const fn BIT(n: u32) -> isize {
-    1 << n
-}
+// Submodules
+pub mod application;
+pub mod window;
+pub mod mouse;
+pub mod keyboard;
 
 // Describes different supported event types
 pub enum EventType {
@@ -33,16 +30,20 @@ pub enum EventType {
     // TODO: Implement Gamepad Support
 }
 
-pub enum EventCategoryFlag {
-    EventCategoryApplication = 0,
-    EventCategoryInput = BIT(0),
-    EventCategoryKeyboard = BIT(1),
-    EventCategoryMouse = BIT(2),
-    EventCategoryMouseButton = BIT(3),
-
-    // TODO: Implement Gamepad Category
+bitflags! {
+    pub struct EventCategoryFlag: u32 {
+        const Application = 0b00000001;
+        const Keyboard = 0b00000010;
+        const MouseMoved = 0b00000100;
+        const MouseButton = 0b00001000;
+        const Input = 0b00010000;
+        const Window = 0b00100000;
+    } 
 }
 
 pub trait Event {
-    fn get_event_category_flags(&self) -> isize;
+    fn event_type(&self) -> EventType;
+    fn category_flags(&self) -> EventCategoryFlag;
+    fn description(&self) -> String;
+    fn is_in_category(&self, ecf: EventCategoryFlag) -> bool;
 }

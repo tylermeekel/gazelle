@@ -1,8 +1,12 @@
 // The main.rs file exists as a Sandboxing environment for the Gazelle application.
-use gazelle;
+use gazelle::{self, event::Event};
 
 fn main() {
-    let mut sandbox = gazelle::Application::build().unwrap();
+    let kpe = gazelle::event::keyboard::KeyPressed {
+        keycode: 1,
+        repeat_count: 1,
+    };
 
-    sandbox.run();
+    println!("{}", kpe.is_in_category(gazelle::event::EventCategoryFlag::Input));
+    println!("{}", kpe.is_in_category(gazelle::event::EventCategoryFlag::MouseButton));
 }
