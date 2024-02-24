@@ -2,10 +2,10 @@
 use gazelle::{self, event::Event};
 
 fn main() {
-    let kpe = gazelle::event::keyboard::KeyPressed::create(123, 1);
+    let mut sandbox = match gazelle::Application::build() {
+        Ok(app) => app,
+        Err(e) => panic!("Error creating application"),
+    };
 
-    println!("{}", kpe.is_in_category(gazelle::event::EventCategoryFlag::Input));
-    println!("{}", kpe.is_in_category(gazelle::event::EventCategoryFlag::MouseButton));
-
-    println!("{}", kpe.description())
+    sandbox.run();
 }
