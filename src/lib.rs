@@ -1,6 +1,5 @@
-use std::{collections::HashMap, f32::consts::E};
+use std::{collections::HashMap, error::Error, f32::consts::E};
 
-use event::window;
 use winit::{event_loop::EventLoop, window::{WindowBuilder, WindowId}};
 
 // Modules
@@ -25,7 +24,7 @@ impl Application {
         })
     }
 
-    pub fn run(&mut self) {
+    pub fn run(&mut self) -> Result<(), Box<dyn Error>> {
         let event_loop = match EventLoop::new() {
             Ok(event_loop) => event_loop,
             Err(e) => panic!("Error Creating EventLoop: {}", e.to_string()),
@@ -37,5 +36,18 @@ impl Application {
             Ok(window) => window,
             Err(e) => panic!("Error creating window: {}", e.to_string()),
         };
+
+        event_loop.run(move |event, event_loop| match event {
+            // Window Events
+            winit::event::Event::WindowEvent { window_id, event } => {
+                match event {
+                    winit::event::WindowEvent::CloseRequested => event_loop.exit(), // Close window on close request
+                    _ => (),
+                }
+            },
+            _ => (),
+        })?;
+
+        Ok(())
     }
 }
