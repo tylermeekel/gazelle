@@ -1,10 +1,12 @@
 // TODO: Implement Remaining Window Events
 
-pub struct WindowClose;
+pub struct WindowClose {
+    is_handled: bool,
+}
 
 impl WindowClose {
     pub fn create() -> Self {
-        Self
+        Self { is_handled: false }
     }
 }
 
@@ -20,11 +22,16 @@ impl super::Event for WindowClose {
     fn description(&self) -> String {
         String::from("Window Close Event")
     }
+
+    fn is_handled(&self) -> bool {
+        self.is_handled
+    }
 }
 
 pub struct WindowResize {
     h: i32,
     w: i32,
+    is_handled: bool,
 }
 
 impl WindowResize {
@@ -32,6 +39,7 @@ impl WindowResize {
         Self {
             h,
             w,
+            is_handled: false,
         }
     }
 }
@@ -47,5 +55,9 @@ impl super::Event for WindowResize {
 
     fn description(&self) -> String {
         format!("Window Resize Event: h={} w={}", self.h, self.w)
+    }
+
+    fn is_handled(&self) -> bool {
+        self.is_handled
     }
 }

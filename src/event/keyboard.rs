@@ -3,6 +3,7 @@ use winit::keyboard::SmolStr;
 pub struct KeyPressed {
     keycode: winit::keyboard::Key<SmolStr>,
     repeat: bool,
+    is_handled: bool,
 }
 
 impl KeyPressed {
@@ -10,6 +11,7 @@ impl KeyPressed {
         Self {
             keycode,
             repeat,
+            is_handled: false,
         }
     }
 }
@@ -24,18 +26,27 @@ impl super::Event for KeyPressed {
     }
 
     fn description(&self) -> String {
-        format!("Key Pressed Event: key={:?} repeat={}", self.keycode, self.repeat)
+        format!(
+            "Key Pressed Event: key={:?} repeat={}",
+            self.keycode, self.repeat
+        )
+    }
+
+    fn is_handled(&self) -> bool {
+        self.is_handled
     }
 }
 
 pub struct KeyReleased {
     keycode: winit::keyboard::Key<SmolStr>,
+    is_handled: bool,
 }
 
 impl KeyReleased {
     pub fn create(keycode: winit::keyboard::Key<SmolStr>) -> Self {
         Self {
-            keycode
+            keycode,
+            is_handled: false,
         }
     }
 }
@@ -51,5 +62,9 @@ impl super::Event for KeyReleased {
 
     fn description(&self) -> String {
         format!("Key Released Event: keycode={:?}", self.keycode)
+    }
+
+    fn is_handled(&self) -> bool {
+        self.is_handled
     }
 }

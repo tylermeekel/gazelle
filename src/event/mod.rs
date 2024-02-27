@@ -2,9 +2,9 @@ use bitflags::bitflags;
 
 // Submodules
 pub mod application;
-pub mod window;
-pub mod mouse;
 pub mod keyboard;
+pub mod mouse;
+pub mod window;
 
 // Describes different supported event types
 pub enum EventType {
@@ -26,19 +26,26 @@ pub enum EventType {
     MouseButtonReleased,
     MouseMoved,
     MouseScrolled,
-
-    // TODO: Implement Gamepad Support
+    // TODO: Implement Gamepad Events
 }
 
+// Helper function for declaring bit flags
+// Shifts a 1 left n times
+const fn bit(n_shifts: u8) -> u32 {
+    1 << n_shifts
+}
+
+// Declare Bitflags for Event categories, so that we can support
+// having multiple categories per event type
 bitflags! {
     pub struct EventCategoryFlag: u32 {
-        const Application = 0b0000_0001;
-        const Keyboard = 0b0000_0010;
-        const MouseMoved = 0b0000_0100;
-        const MouseButton = 0b0000_1000;
-        const Input = 0b0001_0000;
-        const Window = 0b0010_0000;
-    } 
+        const Application = bit(0);
+        const Keyboard = bit(1);
+        const MouseMoved = bit(2);
+        const MouseButton = bit(3);
+        const Input = bit(4);
+        const Window = bit(5);
+    }
 }
 
 pub trait Event {
@@ -48,4 +55,5 @@ pub trait Event {
     fn is_in_category(&self, category: EventCategoryFlag) -> bool {
         self.category_flags().contains(category)
     }
+    fn is_handled(&self) -> bool;
 }

@@ -36,6 +36,7 @@ impl Application {
                 position.x as u32,
                 position.y as u32,
             ))),
+            // Keyboard Inputs
             KeyboardInput { event, .. } => match event.state {
                 winit::event::ElementState::Pressed => Some(Box::new(
                     crate::event::keyboard::KeyPressed::create(event.logical_key, event.repeat),
@@ -44,6 +45,7 @@ impl Application {
                     crate::event::keyboard::KeyReleased::create(event.logical_key),
                 )),
             },
+            // Mouse Inputs
             MouseInput { state, button, .. } => match state {
                 winit::event::ElementState::Pressed => {
                     Some(Box::new(event::mouse::MouseButtonPressed::create(button)))
@@ -52,6 +54,8 @@ impl Application {
                     Some(Box::new(event::mouse::MouseButtonReleased::create(button)))
                 }
             },
+            // Mouse Scroll Input
+            // TODO: Add MouseScrollDelta to MouseScrolled event type
             MouseWheel { .. } => Some(Box::new(event::mouse::MouseScrolled::create())),
             _ => None,
         };
