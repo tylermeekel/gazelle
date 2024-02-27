@@ -30,6 +30,10 @@ impl super::Event for MouseMoved {
     fn is_handled(&self) -> bool {
         self.is_handled
     }
+
+    fn set_handled(&mut self, was_handled: bool) {
+        self.is_handled = was_handled
+    }
 }
 
 pub struct MouseScrolled {
@@ -57,6 +61,10 @@ impl super::Event for MouseScrolled {
 
     fn is_handled(&self) -> bool {
         self.is_handled
+    }
+
+    fn set_handled(&mut self, was_handled: bool) {
+        self.is_handled = was_handled
     }
 }
 
@@ -90,6 +98,10 @@ impl super::Event for MouseButtonPressed {
     fn is_handled(&self) -> bool {
         self.is_handled
     }
+
+    fn set_handled(&mut self, was_handled: bool) {
+        self.is_handled = was_handled
+    }
 }
 
 pub struct MouseButtonReleased {
@@ -121,5 +133,9 @@ impl super::Event for MouseButtonReleased {
 
     fn is_handled(&self) -> bool {
         self.is_handled
+    }
+
+    fn set_handled(&mut self, was_handled: bool) {
+        self.is_handled = was_handled
     }
 }

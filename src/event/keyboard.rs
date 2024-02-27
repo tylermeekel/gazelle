@@ -35,6 +35,10 @@ impl super::Event for KeyPressed {
     fn is_handled(&self) -> bool {
         self.is_handled
     }
+
+    fn set_handled(&mut self, was_handled: bool) {
+        self.is_handled = was_handled
+    }
 }
 
 pub struct KeyReleased {
@@ -66,5 +70,9 @@ impl super::Event for KeyReleased {
 
     fn is_handled(&self) -> bool {
         self.is_handled
+    }
+
+    fn set_handled(&mut self, was_handled: bool) {
+        self.is_handled = was_handled;
     }
 }

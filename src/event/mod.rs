@@ -56,4 +56,20 @@ pub trait Event {
         self.category_flags().contains(category)
     }
     fn is_handled(&self) -> bool;
+    fn set_handled(&mut self, was_handled: bool);
+}
+
+pub struct EventDispatcher {
+    event: Box<dyn Event>,
+}
+
+impl EventDispatcher {
+    pub fn create(event: Box<dyn Event>) -> Self {
+        Self { event }
+    }
+
+    pub fn dispatch(&mut self, event_func: fn(event: &dyn Event) -> bool) {
+        // Sets the event handled state if event_func handled it
+        self.event.set_handled(event_func(self.event.as_ref()))
+    }
 }

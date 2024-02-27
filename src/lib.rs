@@ -6,22 +6,27 @@ use crate::event::Event;
 
 // Modules
 pub mod event;
+pub mod layer;
 pub mod logging;
 
 struct WindowState;
 
 // Application is the entry point for a Gazelle application
 pub struct Application {
-    windows: HashMap<WindowId, WindowState>,
+    layer_stack: layer::stack::LayerStack,
 }
 
 #[derive(Debug)]
 pub enum ApplicationBuildError {}
 
 impl Application {
+    pub fn push_layer(&mut self, new_layer: Box<dyn layer::Layer>) {
+        self.layer_stack.push_layer(new_layer)
+    }
+
     pub fn build() -> Result<Self, ApplicationBuildError> {
         Ok(Application {
-            windows: HashMap::new(),
+            layer_stack: layer::stack::LayerStack::create(),
         })
     }
 
@@ -60,9 +65,15 @@ impl Application {
             _ => None,
         };
 
-        // TODO: Implement an event dispatcher
         match gz_event {
-            Some(event) => logging::log_core(event.description()),
+            Some(event) => {
+                for layer in self.layer_stack.layers.iter() {
+                    layer.on_event(&event); // send event to layer
+                    if event.is_handled() {
+                        break; // break out of the loop if event has been handled to avoid unnecessary calls
+                    }
+                }
+            }
             None => (),
         }
     }
@@ -199,6 +210,11 @@ impl Application {
         // run the event loop, handling events
         event_loop.run(move |event, event_loop| {
             let _ = (&instance, &adapter, &shader, &pipeline_layout);
+
+            // Call the on_update method for each layer attached
+            for layer in self.layer_stack.layers.iter() {
+                layer.on_update();
+            }
 
             match event {
                 // Window Events

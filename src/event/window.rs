@@ -26,6 +26,10 @@ impl super::Event for WindowClose {
     fn is_handled(&self) -> bool {
         self.is_handled
     }
+
+    fn set_handled(&mut self, was_handled: bool) {
+        self.is_handled = was_handled;
+    }
 }
 
 pub struct WindowResize {
@@ -59,5 +63,9 @@ impl super::Event for WindowResize {
 
     fn is_handled(&self) -> bool {
         self.is_handled
+    }
+
+    fn set_handled(&mut self, was_handled: bool) {
+        self.is_handled = was_handled
     }
 }
